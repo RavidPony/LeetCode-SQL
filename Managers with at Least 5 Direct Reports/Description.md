@@ -1,4 +1,5 @@
 # Managers with at Least 5 Direct Reports
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL. Relevant tables will be created in the LeetCode database. 
 
 ## Description
 
