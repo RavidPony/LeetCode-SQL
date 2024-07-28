@@ -1,5 +1,7 @@
 # Managers with at Least 5 Direct Reports
-הההTable: Employee
+
+## Description
+
 Table: Employee
 ```
 +-------------+---------+
@@ -10,6 +12,7 @@ Table: Employee
 | department  | varchar |
 | managerId   | int     |
 +-------------+---------+
+```
 
 id is the primary key (column with unique values) for this table.
 Each row of this table indicates the name of an employee, their department, and the id of their manager.
