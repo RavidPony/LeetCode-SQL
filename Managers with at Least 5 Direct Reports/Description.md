@@ -1,7 +1,7 @@
 # Managers with at Least 5 Direct Reports
 הההTable: Employee
 Table: Employee
-```
+
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
