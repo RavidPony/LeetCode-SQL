@@ -26,6 +26,7 @@ JOIN Users c
   And c.Banned = 'No'
 GROUP BY t.Request_at;
 
+
 --option 3 
 SELECT
   Request_at AS Day
