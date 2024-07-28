@@ -1,5 +1,7 @@
-
 -- window function version
+-- We can simply rank salary over each department as partition, and pick the top 3
+-- Note that we cannot refer to window column rnk in the WHERE clause. So we must set up a temporary table
+
 WITH department_ranking AS(
 SELECT
   e.Name AS Employee
