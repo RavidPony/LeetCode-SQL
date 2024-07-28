@@ -107,3 +107,11 @@ On 2013-10-03:
   - The request with Id=8 was made by a banned client, so it is ignored.
   - Hence there are 2 unbanned request in total, 1 of which were canceled.
   - The Cancellation Rate is (1 / 2) = 0.50
+
+## NOTE:
+* Each trip has two foreign key (*Client_Id*, *Driver_Id*) referring the *Users* table's primary key.
+* No trip can have __NULL__ in *Driver_id* or *Client_Id*.
+* Need to exclude both banned drivers and riders from calculation.
+* Output rate to 2 decimal place as required.
+* Give descriptive names to output columns as required.
+* Constrain date range as required.
