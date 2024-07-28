@@ -56,3 +56,119 @@ The average salary of department '2' is (6000 + 10000)/2 = 8000, which is the av
  
 
 With he same formula for the average salary comparison in February, the result is 'same' since both the department '1' and '2' have the same average salary with the company, which is 7000.
+
+* Note that people get paid on __different__ day of the same months, meaning that you must process the date label before averaging, otherwise you __will not__ get the correct average.
+
+
+## Well explained Solution
+The overall strategy is to build two temporary tables, one aggregated over the pay month, one aggregated over the (pay month, department) key pair. After aggregating, joining the two temporary tables. Because every distinct pay month must exist in both table, inner join is enough.
+
+#### Step 1. Company Monthly Average
+```sql
+mysql> SELECT 
+    ->   date_format(pay_date, '%Y-%m') as pay_month
+    ->   ,AVG(amount) AS corp_avg_sal 
+    ->   FROM salary GROUP BY pay_month;
+```
+```
++-----------+--------------+
+| pay_month | corp_avg_sal |
++-----------+--------------+
+| 2017-02   |    6666.6667 |
+| 2017-03   |    8333.3333 |
++-----------+--------------+
+2 rows in set (0.00 sec)
+```
+
+Notice what happens if you don't process pay_date column before aggregating: you get the wrong average, and your final result will be wrong.
+
+```sql
+mysql> SELECT 
+    ->   pay_date
+    ->   ,AVG(amount) AS corp_avg_sal 
+    ->   FROM salary GROUP BY pay_date;
+```
+```
++------------+--------------+
+| pay_date   | corp_avg_sal |
++------------+--------------+
+| 2017-02-25 |    6000.0000 |
+| 2017-02-28 |    7000.0000 |
+| 2017-03-31 |    8333.3333 |
++------------+--------------+
+3 rows in set (0.00 sec)
+```
+
+#### Step 2. Department Monthly Average
+Similarly, process pay_date before aggregating.
+
+```sql
+mysql> SELECT 
+    ->   date_format(pay_date, '%Y-%m') as pay_month
+    ->  ,e.department_id
+    ->  ,AVG(amount) AS dept_avg_sal 
+    ->  FROM salary AS s
+    ->  JOIN employee AS e
+    ->     ON s.employee_id = e.employee_id
+    ->  GROUP BY pay_month, e.department_id;
+```
+```
++-----------+---------------+--------------+
+| pay_month | department_id | dept_avg_sal |
++-----------+---------------+--------------+
+| 2017-02   |             1 |    6000.0000 |
+| 2017-02   |             2 |    7000.0000 |
+| 2017-03   |             1 |    9000.0000 |
+| 2017-03   |             2 |    8000.0000 |
++-----------+---------------+--------------+
+4 rows in set (0.00 sec)
+```
+
+#### Step 3. Join and Present Results
+Can use inner join, or cross join with where clause, or left join. The results are the same. On LeetCode, the efficiency is quite different: cross join (167ms) < inner join (185ms) < left join (205ms).
+
+
+```sql
+mysql> SELECT  
+    ->   a.pay_month
+    ->   ,a.department_id, 
+    ->   CASE
+    ->     WHEN a.dept_avg_sal < b.corp_avg_sal THEN "lower"
+    ->     WHEN a.dept_avg_sal = b.corp_avg_sal THEN "same"
+    ->     ELSE "higher"
+    ->   END AS comparison
+    -> FROM
+    -> (SELECT 
+    ->   date_format(pay_date, '%Y-%m') as pay_month
+    ->  ,e.department_id
+    ->  ,AVG(amount) AS dept_avg_sal 
+    ->  FROM salary AS s
+    ->  JOIN employee AS e
+    ->     ON s.employee_id = e.employee_id
+    ->  GROUP BY pay_month, e.department_id
+    -> ) AS a
+    -> JOIN
+    -> (SELECT 
+    ->   date_format(pay_date, '%Y-%m') as pay_month
+    ->   ,AVG(amount) AS corp_avg_sal 
+    ->   FROM salary GROUP BY pay_month
+    -> ) AS b
+    -> ON a.pay_month = b.pay_month
+    -> ORDER BY pay_month, department_id;
+```
+```
++-----------+---------------+------------+
+| pay_month | department_id | comparison |
++-----------+---------------+------------+
+| 2017-02   |             1 | same       |
+| 2017-02   |             2 | same       |
+| 2017-03   |             1 | higher     |
+| 2017-03   |             2 | lower      |
++-----------+---------------+------------+
+4 rows in set (0.00 sec)
+```
+
+
+
+
+
