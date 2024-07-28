@@ -1,5 +1,7 @@
 # Department Top Three Salaries
 
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL. Relevant tables will be created in the LeetCode database. 
+
 ## Description
 The Employee table holds all employees. Every employee has an Id, and there is also a column for the department Id.
 ```
