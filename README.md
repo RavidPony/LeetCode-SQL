@@ -1,1 +1,2 @@
-
+## LeetCode SQL interview questions
+This repository delves into an extended analysis of SQL, focusing on LeetCode-style and traditional interview questions. It examines the balance between performance optimization and development efficiency, as well as their impact on overall database design considerations such as indexing and joins. Additionally, it includes specific sample databases that demonstrate complex interview questions.
