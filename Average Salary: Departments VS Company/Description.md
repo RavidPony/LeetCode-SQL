@@ -1,10 +1,11 @@
-# Average Salary: Departments VS Company
+# Average Salary: Departments VS Company - HARD
+
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL. Relevant tables will be created in the LeetCode database. 
 
 ## Description
 
 Given two tables as below, write a query to display the comparison result (higher/lower/same) of the average salary of employees in a department to the company's average salary.
  
-Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL. Relevant tables will be created in the LeetCode database. 
 ```
 mysql < db.sql -uroot -p
 ```
