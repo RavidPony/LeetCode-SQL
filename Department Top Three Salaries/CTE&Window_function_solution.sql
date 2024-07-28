@@ -1,6 +1,6 @@
 -- window function version
 -- We can simply rank salary over each department as partition, and pick the top 3
--- Note that we cannot refer to window column rnk in the WHERE clause. So we must set up a temporary table
+-- Note that we cannot refer to window column rnk in the WHERE clause. So we must set up a temporary table (CTE)
 
 WITH department_ranking AS(
 SELECT
@@ -19,3 +19,5 @@ SELECT
 FROM department_ranking
 WHERE rnk <= 3
 ORDER BY Department ASC, Salary DESC;
+
+-- department_ranking is our CTE 
