@@ -1,5 +1,4 @@
 
-
 SELECT transaction_id
 FROM Transactions AS t1
 WHERE amount = (
