@@ -1,4 +1,4 @@
-# Orders With Maximum Quantity Above Average
+# The Most Frequently Ordered Products for Each Customer
 
 level : medium
 
@@ -6,67 +6,114 @@ level : medium
 
 Table: OrdersDetails
 ```
-+-------------+------+
-| Column Name | Type |
-+-------------+------+
-| order_id    | int  |
-| product_id  | int  |
-| quantity    | int  |
-+-------------+------+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| customer_id   | int     |
+| name          | varchar |
++---------------+---------+
 ```
-(order_id, product_id) is the primary key for this table.
-A single order is represented as multiple rows, one row for each product in the order.
-Each row of this table contains the quantity ordered of the product product_id in the order order_id.
+customer_id is the column with unique values for this table.
+This table contains information about the customers.
 
-You are running an ecommerce site that is looking for imbalanced orders. An imbalanced order is one whose maximum quantity is strictly greater than the average quantity of every order (including itself).
-The average quantity of an order is calculated as (total quantity of all products in the order) / (number of different products in the order). The maximum quantity of an order is the highest quantity of any single product in the order.
+Table: Orders
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| order_id      | int     |
+| order_date    | date    |
+| customer_id   | int     |
+| product_id    | int     |
++---------------+---------+
+order_id is the column with unique values for this table.
+This table contains information about the orders made by customer_id.
+No customer will order the same product more than once in a single day.
+```
 
-Write an  SQL query to find the order_id of all imbalanced orders.
+Table: Products
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| product_name  | varchar |
+| price         | int     |
++---------------+---------+
+product_id is the column with unique values for this table.
+This table contains information about the products.
+```
+Write a solution to find the most frequently ordered product(s) for each customer.
+
+The result table should have the product_id and product_name for each customer_id who ordered at least one order.
+
 Return the result table in any order.
-The query result format is in the following example:
 
-OrdersDetails table:
-```
-+----------+------------+----------+
-| order_id | product_id | quantity |
-+----------+------------+----------+
-| 1        | 1          | 12       |
-| 1        | 2          | 10       |
-| 1        | 3          | 15       |
-| 2        | 1          | 8        |
-| 2        | 4          | 4        |
-| 2        | 5          | 6        |
-| 3        | 3          | 5        |
-| 3        | 4          | 18       |
-| 4        | 5          | 2        |
-| 4        | 6          | 8        |
-| 5        | 7          | 9        |
-| 5        | 8          | 9        |
-| 3        | 9          | 20       |
-| 2        | 9          | 4        |
-+----------+------------+----------+
-```
-Result table:
-```
-+----------+
-| order_id |
-+----------+
-| 1        |
-| 3        |
-+----------+
-```
-The average quantity of each order is:
-- order_id=1: (12+10+15)/3 = 12.3333333
-- order_id=2: (8+4+6+4)/4 = 5.5
-- order_id=3: (5+18+20)/3 = 14.333333
-- order_id=4: (2+8)/2 = 5
-- order_id=5: (9+9)/2 = 9
+The result format is in the following example.
 
-The maximum quantity of each order is:
-- order_id=1: max(12, 10, 15) = 15
-- order_id=2: max(8, 4, 6, 4) = 8
-- order_id=3: max(5, 18, 20) = 20
-- order_id=4: max(2, 8) = 8
-- order_id=5: max(9, 9) = 9
+ 
 
-Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
+Example 1:
+
+Input: 
+Customers table:
+```
++-------------+-------+
+| customer_id | name  |
++-------------+-------+
+| 1           | Alice |
+| 2           | Bob   |
+| 3           | Tom   |
+| 4           | Jerry |
+| 5           | John  |
++-------------+-------+
+```
+Orders table:
+```
++----------+------------+-------------+------------+
+| order_id | order_date | customer_id | product_id |
++----------+------------+-------------+------------+
+| 1        | 2020-07-31 | 1           | 1          |
+| 2        | 2020-07-30 | 2           | 2          |
+| 3        | 2020-08-29 | 3           | 3          |
+| 4        | 2020-07-29 | 4           | 1          |
+| 5        | 2020-06-10 | 1           | 2          |
+| 6        | 2020-08-01 | 2           | 1          |
+| 7        | 2020-08-01 | 3           | 3          |
+| 8        | 2020-08-03 | 1           | 2          |
+| 9        | 2020-08-07 | 2           | 3          |
+| 10       | 2020-07-15 | 1           | 2          |
++----------+------------+-------------+------------+
+```
+Products table:
+```
++------------+--------------+-------+
+| product_id | product_name | price |
++------------+--------------+-------+
+| 1          | keyboard     | 120   |
+| 2          | mouse        | 80    |
+| 3          | screen       | 600   |
+| 4          | hard disk    | 450   |
++------------+--------------+-------+
+```
+Output: 
+```
++-------------+------------+--------------+
+| customer_id | product_id | product_name |
++-------------+------------+--------------+
+| 1           | 2          | mouse        |
+| 2           | 1          | keyboard     |
+| 2           | 2          | mouse        |
+| 2           | 3          | screen       |
+| 3           | 3          | screen       |
+| 4           | 1          | keyboard     |
++-------------+------------+--------------+
+```
+Explanation: 
+Alice (customer 1) ordered the mouse three times and the keyboard one time, so the mouse is the most frequently ordered product for them.
+Bob (customer 2) ordered the keyboard, the mouse, and the screen one time, so those are the most frequently ordered products for them.
+Tom (customer 3) only ordered the screen (two times), so that is the most frequently ordered product for them.
+Jerry (customer 4) only ordered the keyboard (one time), so that is the most frequently ordered product for them.
+John (customer 5) did not order anything, so we do not include them in the result table.
+
+
