@@ -1,4 +1,6 @@
 # Friend Requests II: Who_Has_the_Most_Friends
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL. Relevant tables will be created in the LeetCode database. 
+
 level: medium
 ## Description
 Table: RequestAccepted
