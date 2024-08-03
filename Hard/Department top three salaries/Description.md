@@ -4,7 +4,7 @@ Load the database file [SQL_Schema](SQL_Schema.sql) to localhost MySQL.
 
 level: hard 
 
-##Description
+## Description
 
 Table: Employee
 ```
