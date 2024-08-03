@@ -1,4 +1,5 @@
 # Monthly Transactions I
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL.
 level : medium
 ## Description
 Table: Transactions
