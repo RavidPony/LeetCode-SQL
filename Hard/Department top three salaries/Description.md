@@ -1,6 +1,6 @@
 # Department top three salaries
 
-Load the database file [db.sql](db.sql) to localhost MySQL.
+Load the database file [SQL_Schema.sql](SQL_Schema.sql) to localhost MySQL.
 
 level: hard 
 
